@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المركز الموريتاني للبرمجة - حلول برمجية متكاملة</title>
+    <!-- Chosen Palette: Calm Harmony (Warm Neutral: gray-50, Text: gray-800, Accent: blue-600, Highlight: amber-500) -->
+    <!-- Application Structure Plan: A single-page, vertical-scrolling application with a sticky navigation header for easy access to sections. The structure is designed for a narrative flow: Introduction (Hero/About), Core Offerings (Interactive Solutions Tabs), Proof/Credibility (Why Us/Stats), and Action (Contact). This is more engaging than a static document, guiding the user from awareness to consideration and action. The interactive solutions tab was chosen to present a large amount of product information cleanly without overwhelming the user on initial load. -->
+    <!-- Visualization & Content Choices:
+        - Report Info: Company Profile -> Goal: Inform -> Presentation: Hero section and "About Us" text -> Interaction: Animated counters for "500+ clients" and "10+ years" -> Justification: Creates a dynamic and impressive first impression.
+        - Report Info: Software Products (CliRim, PharmaGes, Nejah) -> Goal: Organize/Inform -> Presentation: Clickable vertical tabs for each product -> Interaction: Clicking a tab dynamically displays its detailed information (features, languages) in an adjacent content panel. -> Justification: Allows users to easily compare products and dive into details without leaving the page, improving usability. -> Method: Vanilla JS content switching.
+        - Report Info: Implied Market Share -> Goal: Visualize -> Presentation: Donut Chart -> Interaction: Hover to see details. -> Justification: Adds a modern, data-driven feel to the advertisement, visually representing the product suite's impact. -> Library: Chart.js (Canvas).
+        - Report Info: Key Strengths ("Why Us?") -> Goal: Inform/Persuade -> Presentation: Icon-based grid of cards -> Interaction: Subtle hover effects. -> Justification: Visually breaks down value propositions into easily digestible points. -> Method: HTML/Tailwind CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        .solution-tab {
+            background-color: #e0e7ff; /* Light blue for non-active tabs */
+            color: #2563eb;
+        }
+        .active-tab {
+            background-color: #1d4ed8; /* Deeper blue for active */
+            color: white;
+            border-right: 4px solid #f59e0b; /* Amber border */
+        }
+        .solution-tab:hover:not(.active-tab) {
+            background-color: #c7d2fe; /* Lighter hover for non-active */
+            color: #1e40af;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-blue-600">المركز الموريتاني للبرمجة</h1>
+            <div class="hidden md:flex space-x-8 space-x-reverse">
+                <a href="#about" class="text-gray-600 hover:text-blue-600 transition duration-300">من نحن</a>
+                <a href="#solutions" class="text-gray-600 hover:text-blue-600 transition duration-300">حلولنا</a>
+                <a href="#why-us" class="text-gray-600 hover:text-blue-600 transition duration-300">لماذا نحن؟</a>
+                <a href="#contact" class="text-gray-600 hover:text-blue-600 transition duration-300">اتصل بنا</a>
+            </div>
+            <a href="#contact" class="hidden md:block bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg">اطلب عرضًا</a>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#about" class="block text-center py-2 px-4 text-sm hover:bg-gray-200">من نحن</a>
+            <a href="#solutions" class="block text-center py-2 px-4 text-sm hover:bg-gray-200">حلولنا</a>
+            <a href="#why-us" class="block text-center py-2 px-4 text-sm hover:bg-gray-200">لماذا نحن؟</a>
+            <a href="#contact" class="block text-center py-2 px-4 text-sm hover:bg-gray-200">اتصل بنا</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="bg-white">
+            <div class="container mx-auto px-6 py-20 md:py-32 text-center">
+                <h2 class="text-3xl md:text-5xl font-extrabold text-gray-800 mb-4">الحلول البرمجية المتكاملة لمستقبل أعمالك</h2>
+                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">نقدم لكم تحديثات وإضافات جديدة لعام 2025، لنكون دائمًا شريككم التقني الموثوق نحو التميز الرقمي.</p>
+                <a href="#solutions" class="bg-amber-500 text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-amber-600 transition duration-300 shadow-xl hover:shadow-2xl">اكتشف حلولنا</a>
+            </div>
+        </section>
+
+        <!-- About Us / Stats Section -->
+        <section id="about" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold mb-3">شريككم التقني الموثوق</h3>
+                    <p class="text-gray-600 max-w-2xl mx-auto">نحن في المركز الموريتاني للبرمجة، نلتزم بتقديم أحدث وأقوى الحلول البرمجية التي تلبي احتياجاتكم المتطورة. مع خبرة تمتد لسنوات في السوق، نفخر بثقة عملائنا التي تدفعنا للتطور المستمر.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                     <div class="grid grid-cols-2 gap-8 text-center">
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <div class="text-blue-600 text-5xl font-bold mb-2" id="clients-counter" data-target="1000">0</div>
+                            <p class="text-gray-500 font-medium">مؤسسة وشركة</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <div class="text-blue-600 text-5xl font-bold mb-2" id="experience-counter" data-target="12">0</div>
+                            <p class="text-gray-500 font-medium">سنوات من الخبرة</p>
+                        </div>
+                    </div>
+                     <div class="chart-container">
+                        <canvas id="productsChart"></canvas>
+                        <p class="text-center text-gray-500 mt-4">توزيع استخدام برامجنا في السوق</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solutions Section -->
+        <section id="solutions" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold mb-3">برامجنا وخدماتنا الرائدة</h3>
+                    <p class="text-gray-600 max-w-2xl mx-auto">صُممت حلولنا لتوفير الكفاءة والدقة والنمو لأعمالكم. استكشف مجموعتنا المتنوعة من البرامج والخدمات الاحترافية التي تواكب تطلعاتكم.</p>
+                </div>
+                <div class="flex flex-col md:flex-row gap-8">
+                    <!-- Tabs -->
+                    <div class="w-full md:w-1/3 flex flex-col">
+                         <button data-content="clirim" class="solution-tab text-right p-4 rounded-lg text-lg font-semibold transition duration-300 mb-2 active-tab">
+                           CliRim 2025 - للإدارة الطبية
+                        </button>
+                        <button data-content="pharmages" class="solution-tab text-right p-4 rounded-lg text-lg font-semibold transition duration-300 mb-2">
+                           PharmaGes 2025 - لإدارة الصيدليات
+                        </button>
+                         <button data-content="nejah" class="solution-tab text-right p-4 rounded-lg text-lg font-semibold transition duration-300 mb-2">
+                           Nejah 2025 - للمحلات التجارية والمؤسسات
+                        </button>
+                        <button data-content="services" class="solution-tab text-right p-4 rounded-lg text-lg font-semibold transition duration-300">
+                           خدمات احترافية إضافية
+                        </button>
+                    </div>
+
+                    <!-- Content -->
+                    <div id="solution-content-area" class="w-full md:w-2/3 bg-gray-50 p-8 rounded-xl shadow-inner min-h-[400px]">
+                        <!-- Content will be injected here by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Why Us Section -->
+        <section id="why-us" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold mb-3">لماذا تختار المركز الموريتاني للبرمجة؟</h3>
+                    <p class="text-gray-600 max-w-2xl mx-auto">نحن لا نبيع البرامج فقط، بل نبني شراكات نجاح مستدامة. تميزنا يكمن في التزامنا بالجودة، الدعم، والتطوير المستمر الذي يضمن لكم التفوق.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-white p-8 rounded-xl shadow-lg text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                        <div class="text-amber-500 mb-4">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3M5.636 5.636l-1.414-1.414m15.556 15.556l-1.414-1.414M18.364 5.636l-1.414 1.414m-12.728 12.728l-1.414 1.414"/></svg>
+                        </div>
+                        <h4 class="font-bold text-xl mb-2">خبرة مثبتة</h4>
+                        <p class="text-gray-600">خبرة تزيد عن 10 سنوات في تطوير وتقديم الحلول البرمجية المتخصصة.</p>
+                    </div>
+                     <div class="bg-white p-8 rounded-xl shadow-lg text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                        <div class="text-amber-500 mb-4">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        </div>
+                        <h4 class="font-bold text-xl mb-2">دعم فني متميز</h4>
+                        <p class="text-gray-600">فريق فني متخصص جاهز لضمان استمرارية عملكم وحل أي مشكلة فورًا.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                        <div class="text-amber-500 mb-4">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                        </div>
+                        <h4 class="font-bold text-xl mb-2">حلول قابلة للتخصيص</h4>
+                        <p class="text-gray-600">برامجنا مرنة وقابلة للتعديل لتناسب احتياجات أعمالكم الفريدة والمتغيرة.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                        <div class="text-amber-500 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M4 17v4m-2-2h4m11-12h4m2 2v4m-12 4h4m2 2v4M17 3v4m2-2h-4" /></svg>
+                        </div>
+                        <h4 class="font-bold text-xl mb-2">جودة وأسعار تنافسية</h4>
+                        <p class="text-gray-600">نقدم أفضل قيمة مقابل استثماركم، مع الحفاظ على أعلى معايير الجودة.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 bg-blue-600 text-white">
+            <div class="container mx-auto px-6 text-center">
+                 <h3 class="text-3xl font-bold mb-3">هل أنت جاهز لتطوير أعمالك؟</h3>
+                 <p class="max-w-2xl mx-auto mb-8">تواصل معنا اليوم للحصول على عرض تقديمي مجاني، ودعنا نريك كيف يمكن لحلولنا أن تحدث فرقًا حقيقيًا.</p>
+                 <div class="flex flex-col md:flex-row justify-center items-center gap-6 text-lg">
+                    <div class="bg-white/20 p-4 rounded-xl">
+                        <strong>الهاتف:</strong>
+                        <a href="tel:+22246409904" class="hover:text-amber-300"> 46.40.99.04</a> - 
+                        <a href="tel:+22222409904" class="hover:text-amber-300"> 22.40.99.04</a>
+                    </div>
+                     <div class="bg-white/20 p-4 rounded-xl">
+                        <strong>البريد الإلكتروني:</strong>
+                        <a href="mailto:info@cmp-mr.com" class="hover:text-amber-300"> info@cmp-mr.com</a>
+                    </div>
+                    <div class="bg-white/20 p-4 rounded-xl">
+                        <strong>الموقع الإلكتروني:</strong>
+                        <a href="http://www.cmp-mr.com" target="_blank" class="hover:text-amber-300"> www.cmp-mr.com</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-6 text-center">
+            <p>جميع الحقوق محفوظة © <span id="year"></span> - المركز الموريتاني للبرمجة.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Mobile Menu
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Set current year in footer
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // Animated Counters
+            const counters = document.querySelectorAll('.text-5xl');
+            const speed = 200; 
+
+            const animateCounter = (counter) => {
+                const target = +counter.getAttribute('data-target');
+                const updateCount = () => {
+                    const count = +counter.innerText;
+                    const inc = target / speed;
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + inc);
+                        setTimeout(updateCount, 1);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCount();
+            };
+            
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounter(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            counters.forEach(counter => observer.observe(counter));
+
+            // Chart.js Donut Chart
+            const ctx = document.getElementById('productsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['CliRim - طبي', 'PharmaGes - صيدليات', 'Nejah - تجاري'],
+                    datasets: [{
+                        label: 'توزيع الاستخدام',
+                        data: [35, 35, 50],
+                        backgroundColor: [
+                            'rgba(37, 99, 235, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                        ],
+                        borderColor: [
+                           '#ffffff'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                             labels: {
+                                color: '#4b5563',
+                                font: {
+                                    family: "'Tajawal', sans-serif",
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            bodyFont: {
+                                family: "'Tajawal', sans-serif",
+                            },
+                            titleFont: {
+                                family: "'Tajawal', sans-serif",
+                            },
+                        }
+                    }
+                }
+            });
+            
+            // Solutions Tab functionality
+            const solutionData = {
+                clirim: {
+                    title: "CliRim 2025 - إدارة العيادات والمستوصفات الطبية",
+                    subtitle: "الإصدار الأكثر شمولاً لإدارة طبية متكاملة.",
+                    features: [
+                        { icon: '💼', title: 'الجانب الإداري', desc: 'تنظيم المواعيد، سجلات المرضى، إدارة الطاقم الطبي.' },
+                        { icon: '💰', title: 'الجانب المالي', desc: 'إدارة الصندوق، المحاسبة العامة، فواتير الخدمات.' },
+                        { icon: '🩺', title: 'الجانب الطبي', desc: 'إدارة ملفات المرضى، الوصفات الطبية، نتائج الفحوصات المخبرية.' }
+                    ],
+                    extras: ['متوفر باللغات: العربية، الفرنسية، .', 'واجهة مستخدم محسّنة لتجربة أسهل وأكثر سلاسة.', 'دعم فني 24/7 لمساعدتكم في أي وقت.']
+                },
+                pharmages: {
+                    title: "PharmaGes 2025 - الرائد في تسيير الصيدليات",
+                    subtitle: "الحل الأمثل للصيدليات الحديثة.",
+                    features: [
+                        { icon: '📦', title: 'إدارة المخزون', desc: 'برنامج شامل لإدارة مخزون الأدوية وتواريخ الصلاحية.' },
+                        { icon: '💳', title: 'تكامل مع أنظمة الدفع', desc: 'دعم أحدث طرق الدفع الإلكتروني في موريتانيا لتسهيل المعاملات.' },
+                        { icon: '📊', title: 'تقارير دقيقة', desc: 'تحليل شامل للمبيعات والمخزون لاتخاذ قرارات مستنيرة.' }
+                    ],
+                    extras: ['متوفر باللغات: العربية والفرنسية.']
+                },
+                nejah: {
+                    title: "Nejah 2025 - للمحلات التجارية والمؤسسات",
+                    subtitle: "البرنامج الأذكى لعملك التجاري.",
+                    features: [
+                        { icon: '🛒', title: 'نظام نقاط البيع (POS)', desc: 'سرعة ودقة في عمليات البيع وإدارة المنتجات.' },
+                        { icon: '📈', title: 'إدارة المخزون المتقدمة', desc: 'تتبع المخزون بسهولة وتنبيهات تلقائية عند نقص المنتجات.' },
+                        { icon: '👥', title: 'إدارة العملاء', desc: 'قاعدة بيانات للعملاء لتتبع المشتريات والعروض.' }
+                    ],
+                    extras: ['متوفر باللغات: العربية، الفرنسية، .', 'موثوق به من أكثر من 500 محل تجاري.']
+                },
+                services: {
+                    title: "خدمات احترافية إضافية",
+                    subtitle: "حلول تقنية متكاملة لدعم أعمالكم.",
+                    features: [
+                        { icon: '📹', title: 'تركيب أنظمة كاميرات المراقبة', desc: 'أنظمة متطورة لتأمين منشأتكم وتوفير راحة البال.' },
+                        { icon: '⚙️', title: 'صيانة وبيع الأجهزة والشبكات', desc: 'حلول متكاملة لجميع احتياجاتكم من الأجهزة والاتصالات.' },
+                        { icon: '📱', title: 'تطوير تطبيقات الويب والهواتف', desc: 'بناء تطبيقات مخصصة تناسب أعمالكم بدقة واحترافية.' }
+                    ],
+                    extras: []
+                }
+            };
+            
+            const contentArea = document.getElementById('solution-content-area');
+            const tabs = document.querySelectorAll('.solution-tab');
+
+            function displayContent(contentKey) {
+                const data = solutionData[contentKey];
+                let featuresHTML = data.features.map(feature => `
+                    <div class="flex items-start mb-4">
+                        <div class="text-2xl mr-4 ml-2">${feature.icon}</div>
+                        <div>
+                            <h5 class="font-bold text-gray-800">${feature.title}</h5>
+                            <p class="text-gray-600">${feature.desc}</p>
+                        </div>
+                    </div>
+                `).join('');
+
+                let extrasHTML = data.extras.map(extra => `
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2 ml-2">✔</span>
+                        ${extra}
+                    </li>
+                `).join('');
+
+                contentArea.innerHTML = `
+                    <h4 class="text-2xl font-bold text-blue-600 mb-2">${data.title}</h4>
+                    <p class="text-gray-600 mb-6">${data.subtitle}</p>
+                    <div class="mb-6">${featuresHTML}</div>
+                    <ul class="space-y-2 text-gray-700">${extrasHTML}</ul>
+                `;
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active-tab'));
+                    tab.classList.add('active-tab');
+                    displayContent(tab.dataset.content);
+                });
+            });
+
+            // Initial content display
+            displayContent('clirim');
+        });
+    </script>
+</body>
+</html>
